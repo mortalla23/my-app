@@ -30,13 +30,13 @@
     },
     methods: {
       goToMap() {
-        // Redirection vers la carte avec le nom et les coordonnées
+        // Redirection vers la carte avec les informations de l'utilisateur
         this.$router.push({
           name: 'MapComponent',
           params: {
             name: this.name,
-            latitude: this.latitude,
-            longitude: this.longitude,
+            latitude: this.latitude || 48.8584, // Assurer une valeur par défaut
+            longitude: this.longitude || 2.2945, // Assurer une valeur par défaut
           },
         });
       },

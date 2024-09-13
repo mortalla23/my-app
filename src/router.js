@@ -5,8 +5,8 @@ import MapComponent from './components/MapComponent.vue';
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'HomeView',
+    component: HomeView,
   },
   {
     path: '/map',

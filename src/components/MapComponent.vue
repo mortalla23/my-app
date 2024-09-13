@@ -28,9 +28,9 @@ export default {
   data() {
     return {
       zoom: 13,
-      center: [this.latitude, this.longitude],
+      center: [this.latitude || 48.8584, this.longitude || 2.2945], // Utiliser une valeur par défaut si undefined
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', // URL pour les tuiles OpenStreetMap
-      userPosition: [this.latitude, this.longitude], // Position initiale de l'utilisateur
+      userPosition: [this.latitude || 48.8584, this.longitude || 2.2945],
       otherUserPosition: [48.8566, 2.3522], // Position de l'autre utilisateur
     };
   },
@@ -46,15 +46,15 @@ export default {
   },
   mounted() {
     socketService.connect(); // Connexion Socket.io
-
-    // Obtenir la position de l'utilisateur via l'API de géolocalisation
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.userPosition = [position.coords.latitude, position.coords.longitude];
-        socketService.sendPosition(this.userPosition); // Envoie la position au serveur
-        this.center = this.userPosition; // Centre la carte sur l'utilisateur
-      });
-    }
+    socketService.sendPosition(this.userPosition);
+    // // Obtenir la position de l'utilisateur via l'API de géolocalisation
+    // if (navigator.geolocation) {
+    //   navigator.geolocation.getCurrentPosition((position) => {
+    //     this.userPosition = [position.coords.latitude, position.coords.longitude];
+    //     socketService.sendPosition(this.userPosition); // Envoie la position au serveur
+    //     this.center = this.userPosition; // Centre la carte sur l'utilisateur
+    //   });
+    // }
 
     // Écoute la position de l'autre utilisateur via Socket.io
     socketService.onOtherUserPosition((position) => {

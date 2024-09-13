@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from './components/HomeView.vue';
+import HomePage from './components/HomePage.vue';
 import MapComponent from './components/MapComponent.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'HomeView',
-    component: HomeView,
+    name: 'HomePage',
+    component: HomePage,
   },
   {
     path: '/map',

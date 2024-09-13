@@ -1,15 +1,29 @@
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
+let socket = null;
 
 export default {
-  connect() {
-    return socket;
-  },
+    connect() {
+        if (!socket) {
+          socket = io('http://localhost:3000'); // Assure-toi que l'URL de ton backend est correcte
+        }
+        return socket;
+      },
+  // Envoie la position de l'utilisateur au serveur
   sendPosition(position) {
-    socket.emit('user_position', position);
+    if (socket) {
+      socket.emit('user_position', position);
+    } else {
+      console.error('Socket non connecté');
+    }
   },
+
+  // Écoute les positions des autres utilisateurs
   onOtherUserPosition(callback) {
-    socket.on('other_user_position', callback);
+    if (socket) {
+      socket.on('other_user_position', callback);
+    } else {
+      console.error('Socket non connecté');
+    }
   }
 };

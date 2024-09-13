@@ -11,7 +11,7 @@
 <script>
 import { LMap, LTileLayer, LMarker } from 'vue3-leaflet';
 import 'leaflet/dist/leaflet.css';
-import socketService from './socketService'; // Importer le service
+import socketService from '../socketService'; // Import du service Socket.io
 
 export default {
   components: {
@@ -22,25 +22,27 @@ export default {
   data() {
     return {
       zoom: 13,
-      center: [48.8584, 2.2945],
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      userPosition: [48.8584, 2.2945],
-      otherUserPosition: [48.8566, 2.3522],
+      center: [48.8584, 2.2945], // Coordonnées par défaut (exemple : Paris)
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', // URL pour les tuiles OpenStreetMap
+      userPosition: [48.8584, 2.2945], // Position initiale de l'utilisateur
+      otherUserPosition: [48.8566, 2.3522], // Position de l'autre utilisateur
     };
   },
   mounted() {
-    const socket = socketService.connect();
+    socketService.connect(); // Connexion Socket.io
 
+    // Obtenir la position de l'utilisateur via l'API de géolocalisation
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.userPosition = [position.coords.latitude, position.coords.longitude];
-        socketService.sendPosition(this.userPosition); // Utiliser le service pour envoyer la position
-        this.center = this.userPosition;
+        socketService.sendPosition(this.userPosition); // Envoie la position au serveur
+        this.center = this.userPosition; // Centre la carte sur l'utilisateur
       });
     }
 
+    // Écoute la position de l'autre utilisateur via Socket.io
     socketService.onOtherUserPosition((position) => {
-      this.otherUserPosition = position;
+      this.otherUserPosition = position; // Met à jour la position de l'autre utilisateur
     });
   }
 };
